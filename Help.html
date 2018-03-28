@@ -1,0 +1,373 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 5.4.5.1 (Linux)"/>
+	<meta name="author" content="Jakub Szlęk"/>
+	<meta name="created" content="2018-03-28T10:43:14.510587803"/>
+	<meta name="changedby" content="Jakub Szlęk"/>
+	<meta name="changed" content="2018-03-28T12:27:27.144563443"/>
+	<style type="text/css">
+		@page { margin: 2cm }
+		p { margin-bottom: 0.25cm; line-height: 120% }
+		td p { margin-bottom: 0.25cm; line-height: 120% }
+		a.cjk:link { so-language: zxx }
+		a.ctl:link { so-language: zxx }
+		a.western:visited { so-language: en-US }
+	</style>
+</head>
+<body lang="en-US" dir="ltr">
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">This
+is an User Interface (ui) application which implements in-vitro
+dissolution profile comparison.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><span lang="en-US">Please
+visit the page, <a class="western" href="https://github.com/jszlek/BEMoDA_shiny">https://github.com/jszlek/BEMoDA_shiny</a></span></font>
+<font face="Cantarell"><span lang="en-US">for more information on the
+application.</span></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><span lang="en-US">In
+general the BEMoDA_shiny</span></font> <font face="Cantarell"><span lang="en-US">utilizes
+two approaches proposed by <a class="western" href="http://journals.sagepub.com/doi/10.1177/009286159603000427">Tsong
+et al. in 1996</a> - model independent approach and</span></font> <font face="Cantarell"><span lang="en-US">by
+<a class="western" href="https://www.ncbi.nlm.nih.gov/pubmed/8987074">Sathe
+et al. in 1996</a> - model dependent approach.</span></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">The
+idea behind the BEMoDA_shiny is presented on the scheme:</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><img src="Help_html_870dc7e37fe5820c.png" name="Obraz3" align="left" width="658" height="338">
+  <br clear="left"/>
+</img>
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><font size="4" style="font-size: 14pt"><b>Model
+independent approach</b></font></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">According
+to Tsong et al. model independent approach can be utilized to
+dissolution profile comparison when:</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">1.
+Similarity limit of the pre-change product is well-defined (Dg = mean
+% of difference)</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">2.
+Dissolution data of the reference product cannot vary significantly
+from batch to batch.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">3.
+Dissolution testing of the test and the reference batches are made
+under identical conditions and with identical number of units.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">4.
+Dissolution profiles have to be adequately represented.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">5.
+Dissolution values are sampled at point that adequately represents
+dissolution profile.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">Under
+this assumptions to compare dissolution profiles of test and
+reference batches in <i><b>model independent</b></i> manner the user
+need to:</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><b>1.
+Prepare data sets for test and reference.</b></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">Dissolution
+data for test and reference need to be gathered in separate files.
+First column should contain units names ref_1 ref_2 ref_3 etc.
+Columns’ names should be labeled according to the scheme: 5-min,
+10-min, 15-min, etc. The dissolution data need to be structured as:</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<table width="662" cellpadding="4" cellspacing="0">
+	<col width="65">
+	<col width="66">
+	<col width="66">
+	<col width="66">
+	<col width="66">
+	<col width="66">
+	<col width="66">
+	<col width="66">
+	<col width="65">
+	<tr valign="bottom">
+		<td width="65" height="8" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><br/>
+
+			</p>
+		</td>
+		<td width="66" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">5-min</font></p>
+		</td>
+		<td width="66" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">10-min</font></p>
+		</td>
+		<td width="66" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">15-min</font></p>
+		</td>
+		<td width="66" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">20-min</font></p>
+		</td>
+		<td width="66" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">30-min</font></p>
+		</td>
+		<td width="66" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">60-min</font></p>
+		</td>
+		<td width="66" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.1cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">90-min</font></p>
+		</td>
+		<td width="65" style="border: 1px solid #000000; padding: 0.1cm">
+			<p align="center"><font face="Cantarell">120-min</font></p>
+		</td>
+	</tr>
+	<tr valign="bottom">
+		<td width="65" height="9" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">REF_1</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">42.06</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">59.91</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">65.58</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">71.81</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">77.77</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">85.67</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">93.14</font></p>
+		</td>
+		<td width="65" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<p align="center"><font face="Cantarell">94.23</font></p>
+		</td>
+	</tr>
+	<tr valign="bottom">
+		<td width="65" height="9" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">REF_2</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">44.16</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">60.18</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">67.17</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">70.82</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">76.11</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">83.27</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">88.01</font></p>
+		</td>
+		<td width="65" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<p align="center"><font face="Cantarell">89.59</font></p>
+		</td>
+	</tr>
+	<tr valign="bottom">
+		<td width="65" height="9" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">REF_3</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">45.63</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">55.77</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">65.56</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">70.5</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">76.92</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">83.91</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">86.83</font></p>
+		</td>
+		<td width="65" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<p align="center"><font face="Cantarell">90.12</font></p>
+		</td>
+	</tr>
+	<tr valign="bottom">
+		<td width="65" height="9" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">REF_4</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">48.52</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">60.39</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">66.51</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">73.06</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">78.54</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">84.99</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">88</font></p>
+		</td>
+		<td width="65" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<p align="center"><font face="Cantarell">93.43</font></p>
+		</td>
+	</tr>
+	<tr valign="bottom">
+		<td width="65" height="9" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">REF_5</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">50.49</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">61.82</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">69.06</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">72.85</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">78.99</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">86.86</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">89.7</font></p>
+		</td>
+		<td width="65" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<p align="center"><font face="Cantarell">90.79</font></p>
+		</td>
+	</tr>
+	<tr valign="bottom">
+		<td width="65" height="8" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">REF_6</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">49.77</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">62.73</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">69.77</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">72.88</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">80.18</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">84.2</font></p>
+		</td>
+		<td width="66" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0cm">
+			<p align="center"><font face="Cantarell">88.88</font></p>
+		</td>
+		<td width="65" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0cm; padding-bottom: 0.1cm; padding-left: 0.1cm; padding-right: 0.1cm">
+			<p align="center"><font face="Cantarell">90.47</font></p>
+		</td>
+	</tr>
+</table>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><b>2.
+Load data sets.</b></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">In
+the main window click on the “Reference” tab. Set the proper data
+format and click “Browse” to navigate to your reference
+dissolution data. If the data is correctly loaded the user should see
+the “spaghetti plot” of dissolution data.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><img src="Help_html_4c7b6b78af60c466.png" name="Obraz1" align="left" width="334" height="288">
+  <br clear="left"/>
+</img>
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">To
+load the test data click on the “Test” tab.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">Please
+be advised, in model independent approach as stated above the user do
+not need the dissolution data for Standard batches to establish
+inter- and batch-to-batch variability.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><b>3.
+Modify settings according to user needs.</b></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><img src="Help_html_f6a3f40c69e331e2.png" name="Obraz2" align="left" width="346" height="190">
+  <br clear="left"/>
+</img>
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">Click
+on the tab “Profile comparison” and select “Model independent”
+option. Set the mean percentage of difference for batch-to-batch and
+inter-lot units. Vector of probabilities is density distribution,
+quantile function for the F distribution with degrees of freedom df1
+= no.of.time.points, df2 = no.of.units.ref + no.of.units.test –
+no.of.time.points - 1</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><b>4.
+Run calculations.</b></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">Click
+on “Run calculations” button.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><font size="4" style="font-size: 14pt"><b>Model
+dependent approach</b></font></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><span style="font-variant: normal"><span style="font-style: normal"><span style="font-weight: normal">In
+</span></span></span><i><b>Model dependent</b></i> approach the user
+need to provide more dissolution data to establish inter- and
+intra-lot variance for reference product. Therefore it is advisable
+to prepare data for 3 reference batches of 12 units each.</font></p>
+</body>
+</html>
