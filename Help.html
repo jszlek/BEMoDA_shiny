@@ -7,7 +7,7 @@
 	<meta name="author" content="Jakub Szlęk"/>
 	<meta name="created" content="2018-03-28T10:43:14.510587803"/>
 	<meta name="changedby" content="Jakub Szlęk"/>
-	<meta name="changed" content="2018-03-28T12:27:27.144563443"/>
+	<meta name="changed" content="2018-03-29T10:21:04.466718992"/>
 	<style type="text/css">
 		@page { margin: 2cm }
 		p { margin-bottom: 0.25cm; line-height: 120% }
@@ -368,6 +368,106 @@ dependent approach</b></font></font></p>
 </span></span></span><i><b>Model dependent</b></i> approach the user
 need to provide more dissolution data to establish inter- and
 intra-lot variance for reference product. Therefore it is advisable
-to prepare data for 3 reference batches of 12 units each.</font></p>
+to prepare data for 3 standard batches of 12 units each. According to
+Sathe et al. the following steps need to be considered:</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">1.
+Definition of mechanistic model suitable to describe dissolution data
+of standardized production size lots or batches.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">2.
+Asses the inter- and intra-batch variability through fitting the
+individual unit dissolution data.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">3.
+Define similarity region (SR) based on the variances of standardized
+batches parameters.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">4.
+Using model chosen in step 1, asses the model parameters of the
+reference (pre-change) and test (post-change) batches by fitting the
+dissolution data.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">5.
+Calculate statistical distance between the mean parameters.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">6.
+Define 90% confidence region (CR) around statistical distance.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">7.
+Compare CR and SR to declare similarity or dissimilarity.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><i><b>In
+order to perform model dependent profile comparison:</b></i></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><b>1.
+Prepare data sets for 3 standard batches of reference product
+(preferably N = 12 each batch).</b></font></p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%">
+<font face="Cantarell"><b>2. Prepare data sets for test (post-change)
+and reference (pre-change) product.</b> The structure of data sets
+need to be in previously mentioned format.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><b>3.
+Load data sets.</b></font></p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%">
+<font face="Cantarell">In the main window click on the “Reference”
+tab. Set the proper data format and click “Browse” to navigate to
+your reference dissolution data. If the data is correctly loaded the
+user should see the “spaghetti plot” of dissolution data. </font>
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%">
+<font face="Cantarell">To load the test data click on the “Test”
+tab and perform the same operations like on previous tab. Click on
+“Standard” tab to load dissolution data for 3 standard batches.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell"><b>4.
+Modify settings according to user needs.</b></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">Click
+on the tab “Profile comparison” and select “Model dependent”
+option.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">From
+the left-hand side options available:</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">1.
+At the first column the user can</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">-
+select mechanistic model</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">-
+chose method for optimization of model parameters (+ no of maximum
+iterations and relative tolerance)</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">2.
+The second column is devoted to settings of similarity (SR) and
+critical region (CR) parameters as:</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">-
+SR confidence interval</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">-
+CR confidence interval</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">-
+no of points detected at boundary of SR and CR</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">-
+draw SR as rectangle or ellipse (when rectangle is selected no of
+points detected at boundary of SR has no effect)</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">-
+log-normal transformation of CR and SR</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">3.
+At the third column the user can chose maximum no of steps for
+optimization of coordinates of SR and CR together with their relative
+tolerance.</font></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%"><font face="Cantarell">Model
+dependent approach implemented in BEMoDA_shiny application is focused
+on the steps 2 – 7. Therefore it is recommended to use more
+suitable software to chose the best model to fit the dissolution
+data.</font></p>
 </body>
 </html>

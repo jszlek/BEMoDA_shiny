@@ -41,7 +41,7 @@ If you encounter troubles installing nlopt please read the StackOverflow questio
 INSTALLATION AND RUNNING
 ========================
 
-1) Download the tar.gz archive from the https://sourceforge.net/projects/bemoda_shiny/
+1) Download the tar.gz archive from the https://sourceforge.net/projects/bemoda-shiny/
 2) Unpack downloaded package (on linux-like systems use "tar xzvf BEMoDA_shiny.tar.gz -C /path/to/my/BEMoDA_shiny/folder")
 3) Run the konsole/terminal or cmd.exe
 4) Navigate to the folder (on linux-like systems use "cd /path/to/my/BEMoDA_shiny/folder")
