@@ -556,15 +556,15 @@ server <- function(input, output, session) {
   
   # the reactive to access the data loaded
   output$ref_file_info <- DT::renderDataTable(datatable(in_ref_data(), colnames=c("Product"=1), caption = "Table: Reference product dissolution profiles.", options = list(
-    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:3,5,6), 2))
+    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:12), 2))
   output$test_file_info <- DT::renderDataTable(datatable(in_test_data(), colnames=c("Product"=1), caption = "Table: Test product dissolution profiles.", options = list(
-    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:3,5,6), 2))
+    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:12), 2))
   output$std_file_info1 <- DT::renderDataTable(datatable(in_std_data1(), colnames=c("Product"=1), caption = "Table: Standard batch 1 product dissolution profiles.", options = list(
-    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:3,5,6), 2))
+    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:12), 2))
   output$std_file_info2 <- DT::renderDataTable(datatable(in_std_data2(), colnames=c("Product"=1), caption = "Table: Standard batch 2 product dissolution profiles.", options = list(
-    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:3,5,6), 2))
+    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:12), 2))
   output$std_file_info3 <- DT::renderDataTable(datatable(in_std_data3(), colnames=c("Product"=1), caption = "Table: Standard batch 3 product dissolution profiles.", options = list(
-    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:3,5,6), 2))
+    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:12), 2))
   
               # BEMoDA_InDep run button
                BEMoDA_InDep_df <-eventReactive(input$BEMoDA_InDep, {
@@ -797,9 +797,18 @@ server <- function(input, output, session) {
                  ellipse1.pts <- contourLines(ellipse1$u, ellipse1$v, ellipse1$z, levels=0)
                  ellipse2.pts <- contourLines(ellipse2$u, ellipse2$v, ellipse2$z, levels=0)
                  
-                 xlim <- c(min=min(ellipse.cr[,1],ellipse.sr[,1]), max=max(ellipse.cr[,1],ellipse.sr[,1]))
-                 ylim <- c(min=min(ellipse.cr[,2],ellipse.sr[,2]), max=max(ellipse.cr[,2],ellipse.sr[,2]))
+                 if(how.draw.sr.region == "Ellipse"){
                  
+                   xlim <- c(min=min(ellipse.cr[,1],ellipse.sr[,1]), max=max(ellipse.cr[,1],ellipse.sr[,1]))
+                   ylim <- c(min=min(ellipse.cr[,2],ellipse.sr[,2]), max=max(ellipse.cr[,2],ellipse.sr[,2]))
+                 
+                 } else if(how.draw.sr.region == "Rectangle"){
+                   
+                   xlim <- c(min=min(ellipse.cr[,1],ellipse.sr[,1],rect.sr3$x2), max=max(ellipse.cr[,1],ellipse.sr[,1], rect.sr3$x1))
+                   ylim <- c(min=min(ellipse.cr[,2],ellipse.sr[,2], rect.sr3$y2), max=max(ellipse.cr[,2],ellipse.sr[,2],rect.sr3$y1))
+                   
+                 }
+                   
                  # Plot and save resulting graph!
                  
                  # png("output.png", width=1800, height=1800, res=300)

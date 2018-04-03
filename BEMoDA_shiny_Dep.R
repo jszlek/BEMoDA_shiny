@@ -92,8 +92,8 @@ nt <- nrow(mt)
 nr <- nrow(mr)
 ns <- nrow(std.list[[1]])
 
-if(nt != nr || ns != nr){
-    stop("Number of observations (dissolution profiles) in test and/or reference/standard differ! Please check the data!")
+if(nt != nr){
+    stop("Number of observations (dissolution profiles) in test and reference differ! Please check the data!")
 }
 
 
