@@ -1,6 +1,6 @@
 /**
 *
-* BEMoDA shiny v1.0 - Bioequivalence Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
+* BEMoDA shiny v1.0 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
 Copyright (C) 2017 Jakub Szlęk, Aleksander Mendyk
 
 Authors: 
@@ -9,7 +9,7 @@ Jakub Szlęk, Aleksander Mendyk
 Affiliation: 
 Jagiellonian University Medical College,
 Faculty of Pharmacy,
-Department of Pharmaceucial Technology and Biopharmaceutics,
+Department of Pharmaceuctial Technology and Biopharmaceutics,
 Medyczna 9 st.,
 30-688 Kraków
 Poland

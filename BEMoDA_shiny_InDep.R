@@ -1,6 +1,6 @@
-# BEMoDA v1.0 - Bioequivalence Model Dependent-Independent Approach script for in-vitro dissolution profile comparison
+# BEMoDA v1.0 - BiowaivEr aid for Model Dependent-Independent Approach script for in-vitro dissolution profile comparison
 # 
-# Bioequivalence Model Independent Approach script for in-vitro dissolution profile comparison as proposed by Tsong et al. in 1996
+# Model Independent Approach script for in-vitro dissolution profile comparison as proposed by Tsong et al. in 1996
 # (Tsong Y, Hammerstrom T, Sathe P, Shah VP. (1996) Statistical Assessment of Mean Differences between Two Dissolution Data Sets, Drug Info. J. 30:1105-1112).
 # 
 # The developed script was based on the code published at forum.bebac.at by Shuanghe (post: SAS/R code of MSD method for comparing dis­so­lution)

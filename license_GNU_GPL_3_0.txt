@@ -189,7 +189,7 @@ If the disclaimer of warranty and limitation of liability provided above cannot 
 
 END OF TERMS AND CONDITIONS
 
-    BEMoDA_shiny - Bioequivalence Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
+    BEMoDA_shiny - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
     Copyright (C) 2017  Jakub Szlęk, Aleksander Mendyk
 
     This program is free software: you can redistribute it and/or modify
