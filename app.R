@@ -47,7 +47,7 @@ require(gridExtra)
 source("BEMoDA_auxiliary_functions.R")
 source("BEMoDA_shiny_InDep.R")
 source("BEMoDA_shiny_Dep.R")
-
+source("BEMoDA_shiny_MANOVA.R")
 
 #' busyIndicator START
 #' 
@@ -340,7 +340,7 @@ ui <- navbarPage(
                                    
                                    column(4,
                                           h5(tags$b("Settings for nloptr to search for critical and similarity regions.")),
-                                          numericInput("nloptr_reg_iter","No of steps in optimization of points(x,y) coordinates",max=100000,min = 0,value=10000),
+                                          numericInput("nloptr_reg_iter","No of steps in optimization of points(x,y) coordinates",max=100000,min = 0,value=4000),
                                           numericInput("nloptr_reg_toler","Relative tolerance of nloptr",max=1e-14,min = 1e-24,value=format(1e-20,scientific=TRUE))
                                           ),
                                    
@@ -356,7 +356,9 @@ ui <- navbarPage(
                              
                            ),
                   
-                  tabPanel("Model independent",
+                  
+                             
+                    tabPanel("Mahalanobis distance", fluid=TRUE,
                              sidebarLayout(
                                sidebarPanel(titlePanel(h4("Settings for model independent approach.")),
                                             h5("Multivariate statistical distance method."),
@@ -379,7 +381,42 @@ ui <- navbarPage(
                                  DT::dataTableOutput("BEMoDA_shiny_InDep_output")
                                )
                              )
-                           )
+                           ),
+                  
+                    tabPanel("MANOVA", fluid=TRUE,
+                             sidebarLayout(
+                               sidebarPanel(titlePanel(h4("Settings for model independent MANOVA repeated measures.")),
+                                            h5("One way MANOVA"),
+                                            
+                                            tags$hr(),
+                                            selectInput("manova_test", label="Test statistic", choices=c("Pillai",  "Wilks", "Hotelling-Lawley", "Roy"), selected = "Pillai",
+                                                         width = 200),
+                                            
+                                            bsTooltip(id="manova_test", title="The name of the test statistic to be used.",
+                                                      placement = "right", options = list(container = "body")),
+                                            
+                                            tags$hr(),
+                                            checkboxInput("manova_intercept", label="Intercept", value=FALSE,
+                                                         width = 200),
+                                            bsTooltip(id="manova_intercept", title="If ‘TRUE’, the intercept term is included in the table.",
+                                                      placement = "right", options = list(container = "body")),
+                                            
+                                            tags$hr(),
+                                            numericInput("manova_tol", label="Tolerance", value = 1e-7, min = 0, max = 1, width = 200),
+                                            bsTooltip(id="manova_intercept", title="If ‘TRUE’, the intercept term is included in the table.",
+                                                      placement = "right", options = list(container = "body")),
+                                            
+                                            tags$hr(),
+                                            actionButton("BEMoDA_MANOVA","Run calculations")
+                                            
+                               ),
+                               mainPanel(
+                                 busyIndicator(),
+                                 verbatimTextOutput("BEMoDA_shiny_MANOVA_output")
+                               )
+                             )
+                             )
+                      
                   ),
   
             navbarMenu("Results",
@@ -573,6 +610,18 @@ server <- function(input, output, session) {
                
                output$BEMoDA_shiny_InDep_output <- DT::renderDataTable({datatable(BEMoDA_InDep_df(), rownames=FALSE, caption= "Table: Results of model independent approach.", options = list(
                  searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:3,5,6), 2)})
+               
+               #BEMoDA_MANOVA run button
+               
+               BEMoDA_MANOVA_output <- eventReactive(input$BEMoDA_MANOVA, {
+                 BEMoDA_MANOVA(input$ref_file$datapath, input$test_file$datapath, input$manova_test, input$manova_intercept,
+                               input$manova_tol)
+               })
+               
+               output$BEMoDA_shiny_MANOVA_output <- renderPrint({
+                 print(BEMoDA_MANOVA_output())
+                 })
+               
 
                
                # model dependent settings for optimx
