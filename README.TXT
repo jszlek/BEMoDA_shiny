@@ -1,6 +1,6 @@
 /**
 *
-* BEMoDA shiny v1.0 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
+* BEMoDA shiny v1.1 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
 Copyright (C) 2017 Jakub Szlęk, Aleksander Mendyk
 
 Authors: 
