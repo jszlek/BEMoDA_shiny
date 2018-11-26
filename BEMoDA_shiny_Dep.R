@@ -1,4 +1,4 @@
-# BEMoDA shiny v1.0 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
+# BEMoDA shiny v1.1 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
 # 
 # Model Dependent-Independent Approach application for in-vitro dissolution profile comparison as proposed by Sathe et al. in 1996
 # (Sathe PM, Tsong Y, Shah VP. In-vitro dissolution profile comparison: statistics and analysis, model dependent approach. Pharm Res. 1996 Dec;13(12):1799-803).
@@ -715,8 +715,8 @@ S.sr <- cov_pool(all.std.par[,2:3],all.std.par[,1])
 # 
 # # matrix of mean variances, intra-lot variances
 
-sd.intra.lot.alpha <- var(all.std.par[,1])
-sd.intra.lot.beta <- var(all.std.par[,2])
+sd.intra.lot.alpha <- var(tapply(all.std.par[,2], all.std.par[,1], mean))
+sd.intra.lot.beta <- var(tapply(all.std.par[,3], all.std.par[,1], mean))
 
 sd.log.std.alpha <- sapply(std.list, function(x) var(x[,1]))
 sd.log.std.beta <- sapply(std.list, function(x) var(x[,2]))
@@ -726,6 +726,7 @@ sqr.sd.log.std.beta <- sd.log.std.beta^2
 
 SD.pooled.alpha <- sqrt((sum(sqr.sd.log.std.alpha)/length(std.list))+sd.intra.lot.alpha)
 SD.pooled.beta <- sqrt((sum(sqr.sd.log.std.beta)/length(std.list))+sd.intra.lot.beta)
+
 
 cat("SD.pooled.alpha","\n")
 print(SD.pooled.alpha)

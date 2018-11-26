@@ -1,4 +1,4 @@
-# BEMoDA shiny v1.0 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
+# BEMoDA shiny v1.1 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
 # 
 # Model Dependent-Independent Approach application for in-vitro dissolution profile comparison as proposed by Sathe et al. in 1996
 # (Sathe PM, Tsong Y, Shah VP. In-vitro dissolution profile comparison: statistics and analysis, model dependent approach. Pharm Res. 1996 Dec;13(12):1799-803).
@@ -74,8 +74,52 @@ u <- seq(min(x)-e.x, max(x)+e.x, length.out=n.x)
 v <- seq(min(y)-e.y, max(y)+e.y, length.out=n.y)
 z <- matrix(evaluate(as.matrix(expand.grid(u, v)), beta=beta.hat), n.x)
 
-return(list(u=u,v=v,z=z))
+return(list(u=u,v=v,z=z, beta.hat=beta.hat))
 }
+
+#### Get ellipse params from ellipse equation
+# The equation of ellipse is:
+# A*x^2 + B*xy + C*y^2 + D*x + E*y - 1 = 0
+
+get.ellipse.params <- function(params){
+  
+  # params should be provided in form that
+  # > sapply(myParams, class)
+  # 
+  # x         y        xy        x2        y2 
+  # "numeric" "numeric" "numeric" "numeric" "numeric"
+  
+  A <- params[["x2"]]
+  B <- params[["xy"]]
+  C <- params[["y2"]]
+  D <- params[["x"]]
+  E <- params[["y"]]
+  F <- -1
+  
+  M0 <- matrix(c(F,D/2,E/2, D/2, A, B/2, E/2, B/2, C), nrow=3, byrow=TRUE)
+  M <- matrix(c(A,B/2,B/2,C), nrow=2)
+  lambda <- eigen(M)$values
+  
+  # assuming abs(lambda[1] - A) < abs(lambda[1] - C), if not, swap lambda[1] and lambda[2] in the following equations:
+  if(abs(lambda[1] - A) < abs(lambda[1] - C)){
+    
+    a <- sqrt(-det(M0)/(det(M)*lambda[1]))  
+    b <- sqrt(-det(M0)/(det(M)*lambda[2]))
+    
+    } else if(abs(lambda[1] - A) >= abs(lambda[1] - C)){
+    
+    a <- sqrt(-det(M0)/(det(M)*lambda[2]))  
+    b <- sqrt(-det(M0)/(det(M)*lambda[1]))
+    
+  }
+  
+  xc <- (B*E-2*C*D)/(4*A*C-B^2)
+  yc <- (B*D-2*A*E)/(4*A*C-B^2)
+  phi <- (pi/2 - atan((A-C)/B))/2
+  
+  return(list(major.axis.length=a,minor.axis.length=b,x.center=xc,y.center=yc,major.angle=phi))
+}
+
 
 #### Function to search the par[1] and par[2] via nloptr function for critical region (CR)
 

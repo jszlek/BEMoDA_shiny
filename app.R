@@ -1,4 +1,4 @@
-# BEMoDA shiny v1.0 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
+# BEMoDA shiny v1.1 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
 # 
 # Model Dependent-Independent Approach application for in-vitro dissolution profile comparison as proposed Tsong et al. in 1996
 # (Tsong Y, Hammerstrom T, Sathe P, Shah VP. (1996) Statistical Assessment of Mean Differences between Two Dissolution Data Sets, Drug Info. J. 30:1105-1112), and by Sathe et al. in 1996
@@ -47,7 +47,7 @@ require(gridExtra)
 source("BEMoDA_auxiliary_functions.R")
 source("BEMoDA_shiny_InDep.R")
 source("BEMoDA_shiny_Dep.R")
-
+source("BEMoDA_shiny_MANOVA.R")
 
 #' busyIndicator START
 #' 
@@ -96,7 +96,7 @@ busyIndicator <- function(text = "Calculation in progress..",img = "ajax-loader.
 ui <- navbarPage(
   
   # Application title
-  "BEMoDA_shiny v0.1",
+  "BEMoDA_shiny v1.1",
   tabPanel("Home",
              titlePanel(h4("Introduction")),
              mainPanel(
@@ -299,6 +299,8 @@ ui <- navbarPage(
                                  fluidRow(
                                    column(4,
                                           
+                                          numericInput("my.seed","Set seed",value=1001),
+                                          
                                           radioButtons("model_choose","Please choose mechanistic model which will be used to fit the dissolution profiles: ",
                                                        choices=c("Zero-order with Tlag", "Zero-order with F0",
                                                         "First-order with Tlag", "First-order with Fmax","Gompertz",
@@ -340,7 +342,7 @@ ui <- navbarPage(
                                    
                                    column(4,
                                           h5(tags$b("Settings for nloptr to search for critical and similarity regions.")),
-                                          numericInput("nloptr_reg_iter","No of steps in optimization of points(x,y) coordinates",max=100000,min = 0,value=10000),
+                                          numericInput("nloptr_reg_iter","No of steps in optimization of points(x,y) coordinates",max=100000,min = 0,value=4000),
                                           numericInput("nloptr_reg_toler","Relative tolerance of nloptr",max=1e-14,min = 1e-24,value=format(1e-20,scientific=TRUE))
                                           ),
                                    
@@ -356,7 +358,9 @@ ui <- navbarPage(
                              
                            ),
                   
-                  tabPanel("Model independent",
+                  
+                             
+                    tabPanel("Mahalanobis distance", fluid=TRUE,
                              sidebarLayout(
                                sidebarPanel(titlePanel(h4("Settings for model independent approach.")),
                                             h5("Multivariate statistical distance method."),
@@ -379,7 +383,42 @@ ui <- navbarPage(
                                  DT::dataTableOutput("BEMoDA_shiny_InDep_output")
                                )
                              )
-                           )
+                           ),
+                  
+                    tabPanel("MANOVA", fluid=TRUE,
+                             sidebarLayout(
+                               sidebarPanel(titlePanel(h4("Settings for model independent MANOVA repeated measures.")),
+                                            h5("One way MANOVA"),
+                                            
+                                            tags$hr(),
+                                            selectInput("manova_test", label="Test statistic", choices=c("Pillai",  "Wilks", "Hotelling-Lawley", "Roy"), selected = "Pillai",
+                                                         width = 200),
+                                            
+                                            bsTooltip(id="manova_test", title="The name of the test statistic to be used.",
+                                                      placement = "right", options = list(container = "body")),
+                                            
+                                            tags$hr(),
+                                            checkboxInput("manova_intercept", label="Intercept", value=FALSE,
+                                                         width = 200),
+                                            bsTooltip(id="manova_intercept", title="If ‘TRUE’, the intercept term is included in the table.",
+                                                      placement = "right", options = list(container = "body")),
+                                            
+                                            tags$hr(),
+                                            numericInput("manova_tol", label="Tolerance", value = 1e-7, min = 0, max = 1, width = 200),
+                                            bsTooltip(id="manova_intercept", title="If ‘TRUE’, the intercept term is included in the table.",
+                                                      placement = "right", options = list(container = "body")),
+                                            
+                                            tags$hr(),
+                                            actionButton("BEMoDA_MANOVA","Run calculations")
+                                            
+                               ),
+                               mainPanel(
+                                 busyIndicator(),
+                                 verbatimTextOutput("BEMoDA_shiny_MANOVA_output")
+                               )
+                             )
+                             )
+                      
                   ),
   
             navbarMenu("Results",
@@ -445,9 +484,9 @@ ui <- navbarPage(
             ),
   
             # tabPanel("License",
-            #            h3("License, BEMoDA shiny v0.1"),
+            #            h3("License, BEMoDA shiny v1.1"),
             #            br(""),
-            #            p("BEMoDA shiny v0.1, shiny port for Bioequivalence Model Dependent-Independent Approach (BEMoDA v1.0) script", align="justified"),
+            #            p("BEMoDA shiny v1.1, shiny port for Bioequivalence Model Dependent-Independent Approach (BEMoDA v1.0) script", align="justified"),
             #            p("Copyright (C) 2018  Jakub Szlęk, Aleksander Mendyk, GPLv3",align="justified"),
             #            p("This program is free software: you can redistribute it and/or modify
             #                 it under the terms of the GNU General Public License as published by
@@ -573,6 +612,18 @@ server <- function(input, output, session) {
                
                output$BEMoDA_shiny_InDep_output <- DT::renderDataTable({datatable(BEMoDA_InDep_df(), rownames=FALSE, caption= "Table: Results of model independent approach.", options = list(
                  searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:3,5,6), 2)})
+               
+               #BEMoDA_MANOVA run button
+               
+               BEMoDA_MANOVA_output <- eventReactive(input$BEMoDA_MANOVA, {
+                 BEMoDA_MANOVA(input$ref_file$datapath, input$test_file$datapath, input$manova_test, input$manova_intercept,
+                               input$manova_tol)
+               })
+               
+               output$BEMoDA_shiny_MANOVA_output <- renderPrint({
+                 print(BEMoDA_MANOVA_output())
+                 })
+               
 
                
                # model dependent settings for optimx
@@ -636,7 +687,8 @@ server <- function(input, output, session) {
                  colnames(data.tmp) <- data.time
                  data.tmp[ "Prod" ] <- rownames(data.tmp)
                  df.molten <- melt(data.tmp, id.vars="Prod")
-                 tmp.plot <- ggplot(df.molten, aes(x = variable, y = value)) + geom_line(aes(color = Prod, group = Prod))
+                 df.molten$variable = as.numeric(as.character(df.molten$variable))
+                 tmp.plot <- ggplot(data=df.molten, aes(x = variable, y = value, group = Prod, color = Prod)) + geom_line()
                  return(tmp.plot)
                })
                
@@ -646,6 +698,7 @@ server <- function(input, output, session) {
                  colnames(data.tmp) <- data.time
                  data.tmp[ "Prod" ] <- rownames(data.tmp)
                  df.molten <- melt(data.tmp, id.vars="Prod")
+                 df.molten$variable = as.numeric(as.character(df.molten$variable))
                  tmp.plot <- ggplot(df.molten, aes(x = variable, y = value)) + geom_line(aes(color = Prod, group = Prod))
                  return(tmp.plot)
                })
@@ -656,6 +709,7 @@ server <- function(input, output, session) {
                  colnames(data.tmp) <- data.time
                  data.tmp[ "Prod" ] <- rownames(data.tmp)
                  df.molten <- melt(data.tmp, id.vars="Prod")
+                 df.molten$variable = as.numeric(as.character(df.molten$variable))
                  tmp.plot <- ggplot(df.molten, aes(x = variable, y = value)) + geom_line(aes(color = Prod, group = Prod))
                  return(tmp.plot)
                })
@@ -666,6 +720,7 @@ server <- function(input, output, session) {
                  colnames(data.tmp) <- data.time
                  data.tmp[ "Prod" ] <- rownames(data.tmp)
                  df.molten <- melt(data.tmp, id.vars="Prod")
+                 df.molten$variable = as.numeric(as.character(df.molten$variable))
                  tmp.plot <- ggplot(df.molten, aes(x = variable, y = value)) + geom_line(aes(color = Prod, group = Prod))
                  return(tmp.plot)
                })
@@ -676,6 +731,7 @@ server <- function(input, output, session) {
                  colnames(data.tmp) <- data.time
                  data.tmp[ "Prod" ] <- rownames(data.tmp)
                  df.molten <- melt(data.tmp, id.vars="Prod")
+                 df.molten$variable = as.numeric(as.character(df.molten$variable))
                  tmp.plot <- ggplot(df.molten, aes(x = variable, y = value)) + geom_line(aes(color = Prod, group = Prod))
                  return(tmp.plot)
                })
@@ -794,6 +850,9 @@ server <- function(input, output, session) {
                  
                  ellipse1 <- draw.ellipse(ellipse.cr[,1], ellipse.cr[,2])
                  ellipse2 <- draw.ellipse(ellipse.sr[,1], ellipse.sr[,2])
+                 
+                 #
+                 
                  ellipse1.pts <- contourLines(ellipse1$u, ellipse1$v, ellipse1$z, levels=0)
                  ellipse2.pts <- contourLines(ellipse2$u, ellipse2$v, ellipse2$z, levels=0)
                  
@@ -1080,6 +1139,10 @@ server <- function(input, output, session) {
 
                  ellipse1 <- draw.ellipse(ellipse.cr[,1], ellipse.cr[,2])
                  ellipse2 <- draw.ellipse(ellipse.sr[,1], ellipse.sr[,2])
+                 
+                 ellipse1.params <- get.ellipse.params(ellipse1$beta.hat)
+                 ellipse2.params <- get.ellipse.params(ellipse2$beta.hat)
+                 
                  ellipse1.pts <- contourLines(ellipse1$u, ellipse1$v, ellipse1$z, levels=0)
                  ellipse2.pts <- contourLines(ellipse2$u, ellipse2$v, ellipse2$z, levels=0)
                  
@@ -1094,6 +1157,30 @@ server <- function(input, output, session) {
                  str9 <- paste("(",min(ellipse2.pts[[1]]$x),", ", max(ellipse2.pts[[1]]$x) ,")")
                  str10 <- paste("LOG-NORMAL PARAM_B")
                  str11 <- paste("(",min(ellipse2.pts[[1]]$y),", ", max(ellipse2.pts[[1]]$y) ,")")
+                 str12 <- paste("")
+                 str13 <- paste("Ellipse CR equation (A*x^2 + B*xy + C*y^2 + D*x + E*y - 1 = 0):")
+                 str14 <- paste("A = ", ellipse1$beta.hat[["x2"]])
+                 str15 <- paste("B = ", ellipse1$beta.hat[["xy"]])
+                 str16 <- paste("C = ", ellipse1$beta.hat[["y2"]])
+                 str17 <- paste("D = ", ellipse1$beta.hat[["x"]])
+                 str18 <- paste("E = ", ellipse1$beta.hat[["y"]])
+                 str19 <- paste("Ellipse params:")
+                 str20 <- paste("Center (x,y): ", "(", ellipse1.params$x.center,", " ,ellipse1.params$y.center, ")")
+                 str21 <- paste("Major axis length: ", ellipse1.params$major.axis.length)
+                 str22 <- paste("Minor axis lenght: ", ellipse1.params$minor.axis.length)
+                 str23 <- paste("Major axis angle (rad): ", ellipse1.params$major.angle)
+                 str24 <- paste("")
+                 str25 <- paste("Ellipse SR equation (A*x^2 + B*xy + C*y^2 + D*x + E*y - 1 = 0):")
+                 str26 <- paste("A = ", ellipse2$beta.hat[["x2"]])
+                 str27 <- paste("B = ", ellipse2$beta.hat[["xy"]])
+                 str28 <- paste("C = ", ellipse2$beta.hat[["y2"]])
+                 str29 <- paste("D = ", ellipse2$beta.hat[["x"]])
+                 str30 <- paste("E = ", ellipse2$beta.hat[["y"]])
+                 str31 <- paste("Ellipse params:")
+                 str32 <- paste("Center (x,y): ", "(", ellipse2.params[["x.center"]],", " , ellipse2.params[["y.center"]], ")")
+                 str33 <- paste("Major axis length: ", ellipse2.params$major.axis.length)
+                 str34 <- paste("Minor axis lenght: ", ellipse2.params$minor.axis.length)
+                 str35 <- paste("Major axis angle (rad): ", ellipse2.params$major.angle)
                  
                  if (input$log_transform == FALSE){
                    
@@ -1105,7 +1192,10 @@ server <- function(input, output, session) {
                  }
                  
                  
-                 HTML(paste(str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11, sep = '<br/>'))
+                 HTML(paste(str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11, str12, str13,
+                            str14, str15, str16, str17, str18, str19, str20, str21, str22, str23, str24, str25,
+                            str26, str27, str28, str29, str30, str31, str32, str33, str34, str35,
+                            sep = '<br/>'))
                  
                })
                
