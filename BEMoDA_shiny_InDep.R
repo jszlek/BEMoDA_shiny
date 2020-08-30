@@ -1,4 +1,4 @@
-# BEMoDA shiny v1.1 - BiowaivEr aid for Model Dependent-Independent Approach script for in-vitro dissolution profile comparison
+# BEMoDA shiny v1.1.2 - BiowaivEr aid for Model Dependent-Independent Approach script for in-vitro dissolution profile comparison
 # 
 # Model Independent Approach script for in-vitro dissolution profile comparison as proposed by Tsong et al. in 1996
 # (Tsong Y, Hammerstrom T, Sathe P, Shah VP. (1996) Statistical Assessment of Mean Differences between Two Dissolution Data Sets, Drug Info. J. 30:1105-1112).
@@ -38,12 +38,7 @@
 # rows contains ref_1 ref_2 ref_3 etc.
 # TAB-delimited file with column names and rownames
 
-BEMoDA_shiny_InDep <- function(filename_ref,filename_test, dg, prob){
-# filename of dissolution of test product
-filename_test <- filename_test
-
-# filename of dissolution of reference product
-filename_ref <- filename_ref
+BEMoDA_shiny_InDep <- function(input_ref, input_test, dg, prob){
 
 # dg is mean % of difference in dissolution between each time points. typically 10. 
 # dg=15 was used to compare result with that of the article. 
@@ -65,8 +60,8 @@ prob <- prob
 # it's better to define those number firstly to be easier to modify the code
 
 # read dissolution data
-mt <- read.csv(file=filename_test,header=TRUE,row.names=1,sep="\t")
-mr <- read.csv(file=filename_ref,header=TRUE,row.names=1,sep="\t")
+mt <- input_test # test
+mr <- input_ref  # reference
 
 nt <- nrow(mt)
 nr <- nrow(mr)

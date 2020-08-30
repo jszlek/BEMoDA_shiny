@@ -1,4 +1,4 @@
-# BEMoDA shiny v1.1 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
+# BEMoDA shiny v1.1.2 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
 # 
 # Model Dependent-Independent Approach application for in-vitro dissolution profile comparison as proposed Tsong et al. in 1996
 # (Tsong Y, Hammerstrom T, Sathe P, Shah VP. (1996) Statistical Assessment of Mean Differences between Two Dissolution Data Sets, Drug Info. J. 30:1105-1112), and by Sathe et al. in 1996
@@ -96,7 +96,7 @@ busyIndicator <- function(text = "Calculation in progress..",img = "ajax-loader.
 ui <- navbarPage(
   
   # Application title
-  "BEMoDA_shiny v1.1",
+  "BEMoDA_shiny v1.1.2",
   tabPanel("Home",
              titlePanel(h4("Introduction")),
              mainPanel(
@@ -484,9 +484,9 @@ ui <- navbarPage(
             ),
   
             # tabPanel("License",
-            #            h3("License, BEMoDA shiny v1.1"),
+            #            h3("License, BEMoDA shiny v1.1.2"),
             #            br(""),
-            #            p("BEMoDA shiny v1.1, shiny port for Bioequivalence Model Dependent-Independent Approach (BEMoDA v1.0) script", align="justified"),
+            #            p("BEMoDA shiny v1.1.2, shiny port for Bioequivalence Model Dependent-Independent Approach (BEMoDA v1.0) script", align="justified"),
             #            p("Copyright (C) 2018  Jakub Szlęk, Aleksander Mendyk, GPLv3",align="justified"),
             #            p("This program is free software: you can redistribute it and/or modify
             #                 it under the terms of the GNU General Public License as published by
@@ -595,28 +595,32 @@ server <- function(input, output, session) {
   
   # the reactive to access the data loaded
   output$ref_file_info <- DT::renderDataTable(datatable(in_ref_data(), colnames=c("Product"=1), caption = "Table: Reference product dissolution profiles.", options = list(
-    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:12), 2))
+                            searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)))
   output$test_file_info <- DT::renderDataTable(datatable(in_test_data(), colnames=c("Product"=1), caption = "Table: Test product dissolution profiles.", options = list(
-    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:12), 2))
+    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)))
   output$std_file_info1 <- DT::renderDataTable(datatable(in_std_data1(), colnames=c("Product"=1), caption = "Table: Standard batch 1 product dissolution profiles.", options = list(
-    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:12), 2))
+    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)))
   output$std_file_info2 <- DT::renderDataTable(datatable(in_std_data2(), colnames=c("Product"=1), caption = "Table: Standard batch 2 product dissolution profiles.", options = list(
-    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:12), 2))
+    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)))
   output$std_file_info3 <- DT::renderDataTable(datatable(in_std_data3(), colnames=c("Product"=1), caption = "Table: Standard batch 3 product dissolution profiles.", options = list(
-    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:12), 2))
+    searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)))
   
               # BEMoDA_InDep run button
                BEMoDA_InDep_df <-eventReactive(input$BEMoDA_InDep, {
-                 BEMoDA_shiny_InDep(input$ref_file$datapath,input$test_file$datapath,input$modindg,input$modinprob)
+                 ref <- in_ref_data()
+                 test <- in_test_data()
+                 BEMoDA_shiny_InDep(ref, test, input$modindg,input$modinprob)
                })
                
                output$BEMoDA_shiny_InDep_output <- DT::renderDataTable({datatable(BEMoDA_InDep_df(), rownames=FALSE, caption= "Table: Results of model independent approach.", options = list(
-                 searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0)) %>% formatRound(c(1:3,5,6), 2)})
+                 searching = FALSE, autoWitdth=TRUE, bLengthChange=0, bInfo=0))})
                
                #BEMoDA_MANOVA run button
                
                BEMoDA_MANOVA_output <- eventReactive(input$BEMoDA_MANOVA, {
-                 BEMoDA_MANOVA(input$ref_file$datapath, input$test_file$datapath, input$manova_test, input$manova_intercept,
+                 ref <- in_ref_data()
+                 test <- in_test_data()
+                 BEMoDA_MANOVA(ref, test, input$manova_test, input$manova_intercept,
                                input$manova_tol)
                })
                
@@ -631,7 +635,7 @@ server <- function(input, output, session) {
                output$optimx_method <- renderUI({
                  if(input$model_optim == "optimx"){
                      selectInput("optimx_method", "Optimx method",
-                                 list("BFGS", "Nelder-Mead"))
+                                 list("L-BFGS-B", "Nelder-Mead"))
                  }
                })
                
@@ -643,7 +647,7 @@ server <- function(input, output, session) {
                
                output$optimx_toler <- renderUI({
                  if(input$model_optim == "optimx"){
-                   numericInput("optimx_toler", "Optimization relative tolerance",value=format(1e-20, scientific = TRUE), min=1e-24,max=1e-14)
+                   numericInput("optimx_toler", "Optimization relative tolerance",value=format(1e-10, scientific = TRUE), min=1e-24,max=1e-7)
                  }
                })
                
@@ -651,7 +655,7 @@ server <- function(input, output, session) {
                
                output$nloptr_iter <- renderUI({
                  if(input$model_optim == "nloptr"){
-                   numericInput("nloptr_iter", "Number of maximum iteriations",value=10000,min=0,max=100000)
+                   numericInput("nloptr_iter", "Number of maximum iteriations",value=1000,min=0,max=100000)
                  }
                })
                

@@ -1,4 +1,4 @@
-# BEMoDA shiny v1.1 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
+# BEMoDA shiny v1.1.2 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
 # 
 # Model Dependent-Independent Approach application for in-vitro dissolution profile comparison as proposed by Sathe et al. in 1996
 # (Sathe PM, Tsong Y, Shah VP. In-vitro dissolution profile comparison: statistics and analysis, model dependent approach. Pharm Res. 1996 Dec;13(12):1799-803).
@@ -171,10 +171,20 @@ if(optim.model.params$method == "optimx"){
 optim.method <- optim.model.params$optimx_method
 maxit <- optim.model.params$maxit
 
-optimx.r <- optimx(starting.params, model.2params, t=dat.r[,1], X=dat.r[,2], which.model=dissol.model, method=optim.method, control=list(trace=FALSE,maxit=maxit))
-optimx.t <- optimx(starting.params, model.2params, t=dat.t[,1], X=dat.t[,2], which.model=dissol.model, method=optim.method, control=list(trace=FALSE,maxit=maxit))
+optimx.r <- optimx(starting.params, fn=model.2params, t=dat.r[,1], X=dat.r[,2],
+                   which.model=dissol.model, method=optim.method, hessian = FALSE,
+                   itnmax = maxit, lower = lower.boundary, upper = upper.boundary, 
+                   control=list(trace=1))
+
+
+
+optimx.t <- optimx(starting.params, fn=model.2params, t=dat.t[,1], X=dat.t[,2],
+                   which.model=dissol.model, method=optim.method, hessian = FALSE,
+                   itnmax = maxit, lower = lower.boundary, upper = upper.boundary,
+                   control=list(trace=1))
 
 # Get the alpha and beta parameters from the model
+
 r.alpha.calc <- optimx.r$p1
 r.beta.calc <- optimx.r$p2
 
@@ -194,12 +204,12 @@ optim_rel_tol <- optim.model.params$toler
 
 nloptr.r <- nloptr(x0=starting.params, eval_f=model.2params, lb=lower.boundary, ub=upper.boundary,
                             t=dat.r[,1],X=dat.r[,2], which.model=dissol.model,
-                            opts=list(algorithm="NLOPT_GN_CRS2_LM",xtol_rel=optim_rel_tol,maxeval=maxit,print_level=0,local_opts=list(algorithm="NLOPT_LD_MMA",xtol_rel=optim_rel_tol))
+                            opts=list(algorithm="NLOPT_GN_CRS2_LM",xtol_rel=optim_rel_tol,maxeval=maxit,print_level=1,local_opts=list(algorithm="NLOPT_LD_MMA",xtol_rel=optim_rel_tol))
                             )
 
 nloptr.t <- nloptr(x0=starting.params, eval_f=model.2params, lb=lower.boundary, ub=upper.boundary,
                             t=dat.t[,1],X=dat.t[,2], which.model=dissol.model,
-                            opts=list(algorithm="NLOPT_GN_CRS2_LM",xtol_rel=optim_rel_tol,maxeval=maxit,print_level=0,local_opts=list(algorithm="NLOPT_LD_MMA",xtol_rel=optim_rel_tol))
+                            opts=list(algorithm="NLOPT_GN_CRS2_LM",xtol_rel=optim_rel_tol,maxeval=maxit,print_level=1,local_opts=list(algorithm="NLOPT_LD_MMA",xtol_rel=optim_rel_tol))
                             )
                             
                             
@@ -247,27 +257,33 @@ if(optim.model.params$method == "nls"){
   
   if(dissol.model == "Weibull"){
     
-    fit.s <- nls(X ~ 100*(1-exp(-alpha*t^(beta))),start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ 100*(1-exp(-alpha*t^(beta))),start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ 100*(1-exp(-alpha*t^(beta))),start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if (dissol.model == "Korsmeyer-Peppas"){
     
-    fit.s <- nls(X ~ 100*(alpha*(t^(beta))),start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ 100*(alpha*(t^(beta))),start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ 100*(alpha*(t^(beta))),start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if(dissol.model == "Peppas-Sahlin"){
     
-    fit.s <- nls(X ~ (alpha*(t*60)^(0.5)+beta*(t*60)),start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ (alpha*(t*60)^(0.5)+beta*(t*60)),start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ (alpha*(t*60)^(0.5)+beta*(t*60)),start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if (dissol.model =="Quadratic"){
     
-    fit.s <- nls(X ~ 100*(alpha*(t*60)^2+beta*(t*60)),start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ 100*(alpha*(t*60)^2+beta*(t*60)),start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ 100*(alpha*(t*60)^2+beta*(t*60)),start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if(dissol.model == "Logistic"){
     
-    fit.s <- nls(X ~ 100*((exp(alpha+beta*log10(t*60)))/(1+exp(alpha+beta*log10(t*60)))),start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ 100*((exp(alpha+beta*log10(t*60)))/(1+exp(alpha+beta*log10(t*60)))),start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ 100*((exp(alpha+beta*log10(t*60)))/(1+exp(alpha+beta*log10(t*60)))),start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if(dissol.model == "Gompertz"){
     
-    fit.s <- nls(X ~ 100*exp(-alpha*exp(-beta*log10(t*60))),start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ 100*exp(-alpha*exp(-beta*log10(t*60))),start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ 100*exp(-alpha*exp(-beta*log10(t*60))),start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
     # } else if (which.model=="Probit"){ 
     #   fi <- pnorm(time,mean=mean(time),sd=sd(time)) # should be normal distribution function of time, but it seems that smth is wrong here =========> switch-off
@@ -277,36 +293,43 @@ if(optim.model.params$method == "nls"){
     
   } else if(dissol.model == "Zero-order with Tlag"){
     
-    fit.s <- nls(X ~ alpha*(t*60 - beta),start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ alpha*(t*60 - beta),start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ alpha*(t*60 - beta),start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if(dissol.model == "Zero-order with F0"){
     
-    fit.s <- nls(X ~ alpha + beta*t*60,start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ alpha + beta*t*60,start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ alpha + beta*t*60,start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if(dissol.model == "First-order with Tlag"){
     
-    fit.s <- nls(X ~ 100*(1-exp(-alpha*(t*60-beta))),start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ 100*(1-exp(-alpha*(t*60-beta))),start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ 100*(1-exp(-alpha*(t*60-beta))),start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if(dissol.model == "First-order with Fmax"){
     
-    fit.s <- nls(X ~ alpha*(1-exp(-beta*t*60)),start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ alpha*(1-exp(-beta*t*60)),start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ alpha*(1-exp(-beta*t*60)),start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if(dissol.model == "Higuchi with Tlag"){
     
-    fit.s <- nls(X ~ alpha*(t*60-beta)^0.5,start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ alpha*(t*60-beta)^0.5,start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ alpha*(t*60-beta)^0.5,start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if(dissol.model == "Higuchi with F0"){
     
-    fit.s <- nls(X ~ alpha + beta*(t*60)^0.5,start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ alpha + beta*(t*60)^0.5,start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ alpha + beta*(t*60)^0.5,start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if(dissol.model == "Hixon-Crowell with Tlag"){
     
-    fit.s <- nls(X ~ 100*(1-(1-alpha*(t*60-beta))^3),start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.r <- nls(X ~ 100*(1-(1-alpha*(t*60-beta))^3),start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ 100*(1-(1-alpha*(t*60-beta))^3),start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
     
   } else if(dissol.model == "Hopfenberg"){
     
-    fit.s <- nls(X ~ 100*(1-(1-alpha*t*60)^beta),start=list(alpha=1,beta=1),data=as.data.frame(dat.s),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
-    
+    fit.r <- nls(X ~ 100*(1-(1-alpha*t*60)^beta),start=list(alpha=1,beta=1),data=as.data.frame(dat.r),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
+    fit.t <- nls(X ~ 100*(1-(1-alpha*t*60)^beta),start=list(alpha=1,beta=1),data=as.data.frame(dat.t),control = list(maxiter = maxit,warnOnly=T),trace=TRUE)
   }
   
 
@@ -462,7 +485,10 @@ dat.s <- as.data.frame(t(dat.s))
 # optimx optim method
 if(optim.model.params$method == "optimx"){
 
-optimx.s <- optimx(starting.params, model.2params, t=dat.s[,1],X=dat.s[,2], which.model=dissol.model, method=optim.method, control=list(trace=FALSE,maxit=maxit))
+optimx.s <- optimx(starting.params, fn=model.2params, t=dat.s[,1],X=dat.s[,2],
+                   which.model=dissol.model, method=optim.method,
+                   itnmax = maxit, lower = lower.boundary, upper = upper.boundary,
+                   control=list(trace=1))
 
 # Get the alpha and beta parameters from the model
 s.alpha.calc <- optimx.s$p1
