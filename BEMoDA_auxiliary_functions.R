@@ -1,4 +1,4 @@
-# BEMoDA shiny v1.1 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
+# BEMoDA shiny v1.1.2 - BiowaivEr aid for Model Dependent-Independent Approach application for in-vitro dissolution profile comparison
 # 
 # Model Dependent-Independent Approach application for in-vitro dissolution profile comparison as proposed by Sathe et al. in 1996
 # (Sathe PM, Tsong Y, Shah VP. In-vitro dissolution profile comparison: statistics and analysis, model dependent approach. Pharm Res. 1996 Dec;13(12):1799-803).
