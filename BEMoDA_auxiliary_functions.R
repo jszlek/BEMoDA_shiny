@@ -405,7 +405,7 @@ model.2params.fit <- function(t, alpha.calc, beta.calc, which.model){
     # Enscore DJ, Hopfenberg HB, Stannett VT. Effect of particle size on the mechanism controlling n-hexane sorption in glassy polystyrene microspheres. Polymer. 1977;18:793–800.
   }
 
-  closeAllConnections()
+  # closeAllConnections()
   return(diss)
 }
 
