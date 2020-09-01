@@ -309,7 +309,7 @@ model.2params <- function(params, t, X, which.model){
     res<-Inf
   }
   
-  closeAllConnections()
+  # closeAllConnections() - this line was responsible for slow optimization process
   return(res)
 }
 
