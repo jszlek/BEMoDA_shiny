@@ -54,6 +54,12 @@ Alternativley:
 8) Run the shiny application by typing "runApp()"
 9) This command should run the app in a browser
 
+It is also possible to visit:
+
+https://jszlek.shinyapps.io/BEMoDA_shiny_v1_1_2/
+
+and check the app
+
 *
 *
 **/
