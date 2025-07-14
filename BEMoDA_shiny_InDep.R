@@ -125,6 +125,11 @@ ci2 <- sqrt(t(bound2) %*% spinv %*% bound2)
 dm_lower <- min(ci1, ci2)
 dm_upper <- max(ci1, ci2)
 
+  # F-stats
+  f_stat_obs <- k * dm^2
+  cat("Observed F-stat = ", as.numeric(f_stat_obs), "\n\n")
+  cat("Observed F-crit = ", as.numeric(fcrit),"\n\n")
+    
 if(dm_upper < dm_max){
     
     conclusion <- "Similar"
@@ -134,8 +139,9 @@ if(dm_upper < dm_max){
         conclusion <- "Not similar"
     }   
 
-result <- data.frame(cbind(dm, dm_lower, dm_upper, dg, dm_max, H2, conclusion))
-names(result) <- c("Dm - 'M' Distance", "Dm_lower", "Dm_upper", "Dg (%)", "Dm_max", "Hotelling T Square - Scaled 'M' Distance", "Conclusion")
+result <- data.frame(cbind(dm, dm_lower, dm_upper, dg, dm_max, H2, fcrit, f_stat_obs, conclusion))
+names(result) <- c("Dm - 'M' Distance", "Dm_lower", "Dm_upper", "Dg (%)", "Dm_max", "Hotelling T Square - Scaled 'M' Distance",
+                   "F-crit", "F-stat", "Conclusion")
 
 cat("====================================","\n")
 cat("Result matrix","\n")
